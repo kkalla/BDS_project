@@ -32,3 +32,7 @@ https://www.data.go.kr/dataset/3055090/openapi.do
 https://www.data.go.kr/dataset/15021115/openapi.do
 - 농촌마을 현황정보
 https://www.data.go.kr/dataset/15013685/openapi.do
+- 과수재배변동정보
+https://www.data.go.kr/dataset/3061376/openapi.do
+- 농산물이력관리정보조회서비스
+https://www.data.go.kr/dataset/15000761/openapi.do
