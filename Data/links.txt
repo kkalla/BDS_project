@@ -2,47 +2,33 @@
 
 - 프로젝트용 구글 드라이브: https://drive.google.com/drive/folders/0B0i2YOqHcJhZbnlVcUZtdFRKVU0?usp=sharing
 ------------------------------
+기후정보포털
 
-- 경기데이터드림
-	
-- 노인 요양시설 현황: http://data.gg.go.kr/portal/data/village/selectServicePage.do?page=8&rows=10&sortColumn=&sortDirection=&infId=VYV13CPM082182L749LJ1795965&infSeq=3&order=&sigunFlag=41110&cateId=GG05
-	
-- 치매센터 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=7PV1MDI984K6DC3IL5R421702415&infSeq=1&order=&cateId=GG05
-	
-- 병원평가정보(요양병원) 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=UK3IJB63YWJF3OR1Z95321343606&infSeq=1&order=&cateId=GG05
-	
-- 요양병원 현황(병원급): http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=4&rows=10&sortColumn=&sortDirection=&infId=ZB3Q91UH3YNE8655S8C5136365&infSeq=1&order=&cateId=GG05
-	
-- 양로시설 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=4&rows=10&sortColumn=&sortDirection=&infId=6JQI52NMF01C3IA6D2ET13896796&infSeq=1&order=&cateId=GG05
-	
-- 사회복지법인 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=5&rows=10&sortColumn=&sortDirection=&infId=79XX6546L70TPM3JXR1V2215454&infSeq=1&order=&cateId=GG05
-	
-- 기초노령연금수급자 집계현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=5&rows=10&sortColumn=&sortDirection=&infId=SGD8OQLO6OG7BQZXD9G916938288&infSeq=1&order=&cateId=GG05
-	
-- 종합병원 현황(병원급): http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=6&rows=10&sortColumn=&sortDirection=&infId=14X2BVE67VZ0043G1LO82121932&infSeq=1&order=&cateId=GG05
-	
-- 재가 노인 복지시설 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=7&rows=10&sortColumn=&sortDirection=&infId=603PT24OQ6T6IM5OK6441192048&infSeq=1&order=&cateId=GG05
-	
-- 보건진료소 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=8&rows=10&sortColumn=&sortDirection=&infId=HTJ2YZ2TR9CCAV5LK646342861&infSeq=1&order=&cateId=GG05
-	
-- 노인복지사회복지법인 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=8&rows=10&sortColumn=&sortDirection=&infId=46AM31VKSQDEPO4BSE0D20394596&infSeq=1&order=&cateId=GG05
-	
-- 병원 현황(병원급): http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=9&rows=10&sortColumn=&sortDirection=&infId=6T98794V0223GQQ9O1P42484027&infSeq=1&order=&cateId=GG05
-	
-- 보건진료소 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=8&rows=10&sortColumn=&sortDirection=&infId=HTJ2YZ2TR9CCAV5LK646342861&infSeq=1&order=&cateId=GG05
-	
-- 응급의료센터 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=8&rows=10&sortColumn=&sortDirection=&infId=2V907117JYW4JNDSN2WK159326&infSeq=1&order=&cateId=GG05
-	
-- 요양 보호사 교육기관 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=10&rows=10&sortColumn=&sortDirection=&infId=0O03WKDO3LW72ER216Q81388542&infSeq=1&order=&cateId=GG05
-	
-- 의원 현황: http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=16&rows=10&sortColumn=&sortDirection=&infId=9091L96FYGLU9J9I8UC52153092&infSeq=1&order=&cateId=GG05
-	
-- 노인 전문병원 현황:
-	http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=19&rows=10&sortColumn=&sortDirection=&infId=I1X7IS4841T1T1282A35681783&infSeq=1&order=&cateId=GG05
-	
-- 병원 현황:
-	http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=20&rows=10&sortColumn=&sortDirection=&infId=5E9F96P9YXCJ8ZTFHFF721022502&infSeq=1&order=&cateId=GG05
+- 경기도 기후변화 상세분석 보고서
+http://www.climate.go.kr/home/bbs/view.php?code=71&bname=scenario&vcode=5804&skind=&sword=&category1=&category2=
 
+- 기후변화 시나리오 관련 책자
+http://www.climate.go.kr/home/bbs/view.php?code=71&bname=scenario&vcode=4673&skin=information&bbs_scale=600&bbs_align=left&cpage=1&vNum=Notice&skind=&sword=&category1=&category2=
+- 농업분야 응용정보 도움말/ 활용예시
+https://ccs.climate.go.kr/appl2/help/help_agrcAplcInfo
+https://ccs.climate.go.kr/appl2/help/exam_agrcAplcInfo
 
+----------------------------------------------------------------------------------------
+공공데이터 포털
 
-
+- 농지정보도
+https://www.data.go.kr/dataset/3047689/openapi.do
+- 사업품종소개 ( 농업기술실용화재단): 종자거래장터의 거래 사업품종을 소개함.
+https://www.data.go.kr/dataset/15000948/openapi.do
+- 농촌진흥청 병해충 정보
+https://www.data.go.kr/dataset/15015160/openapi.do
+- 농업기상정보: AWS에서 수집되는 농업기상관측자료
+https://www.data.go.kr/dataset/3061366/openapi.do
+- 농수축산 통합유통 정보
+https://www.data.go.kr/dataset/15015144/openapi.do
+- 과실출하약정 현황
+https://www.data.go.kr/dataset/3055090/openapi.do
+- 지자체 농수축산물 물가조사 가격정보
+https://www.data.go.kr/dataset/15021115/openapi.do
+- 농촌마을 현황정보
+https://www.data.go.kr/dataset/15013685/openapi.do
