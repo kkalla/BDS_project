@@ -11,6 +11,7 @@ for(i in 1:32){
     data_list[[i]] <- read.csv(paste('Data/gg_public_assets/',files[i],sep=""))
     df <- data_list[[i]]
     df$address <- paste(df$시군구명,df$읍면동명,df$리명,df$본번,"-",df$부번)
+    df$address <- gsub("NA","",df$address)
     data_list[[i]] <- df
 }
 
@@ -38,14 +39,17 @@ get_geocode <- function(adr){
     return(lonlat)
 }
 
-for(i in 1:8){
+
+
+sub <- data_list
+for(i in 17:32){
+    
     lonlat <- get_geocode(data_list[[i]]$address)
-    data_list[[i]]$longitude <- lonlat[,1]
-    data_list[[i]]$latitude <- lonlat[,2]
+    sub[[i]]$longitude <- as.numeric(lonlat[,1])
+    sub[[i]]$latitude <- as.numeric(lonlat[,2])
 }
 
 ## write csv file
-for(i in 1:length(data_list)){
-    write.csv(paste('Data/gg_public_assets/',files[i],sep=""))
+for(i in 17:32){
+    write.csv(sub[[i]],paste('Data/',files[i],sep=""))
 }
-
