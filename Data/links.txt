@@ -9,30 +9,6 @@ http://www.climate.go.kr/home/bbs/view.php?code=71&bname=scenario&vcode=5804&ski
 
 - 기후변화 시나리오 관련 책자
 http://www.climate.go.kr/home/bbs/view.php?code=71&bname=scenario&vcode=4673&skin=information&bbs_scale=600&bbs_align=left&cpage=1&vNum=Notice&skind=&sword=&category1=&category2=
-- 농업분야 응용정보 도움말/ 활용예시
-https://ccs.climate.go.kr/appl2/help/help_agrcAplcInfo
-https://ccs.climate.go.kr/appl2/help/exam_agrcAplcInfo
-
 ----------------------------------------------------------------------------------------
 공공데이터 포털
 
-- 농지정보도
-https://www.data.go.kr/dataset/3047689/openapi.do
-- 사업품종소개 ( 농업기술실용화재단): 종자거래장터의 거래 사업품종을 소개함.
-https://www.data.go.kr/dataset/15000948/openapi.do
-- 농촌진흥청 병해충 정보
-https://www.data.go.kr/dataset/15015160/openapi.do
-- 농업기상정보: AWS에서 수집되는 농업기상관측자료
-https://www.data.go.kr/dataset/3061366/openapi.do
-- 농수축산 통합유통 정보
-https://www.data.go.kr/dataset/15015144/openapi.do
-- 과실출하약정 현황
-https://www.data.go.kr/dataset/3055090/openapi.do
-- 지자체 농수축산물 물가조사 가격정보
-https://www.data.go.kr/dataset/15021115/openapi.do
-- 농촌마을 현황정보
-https://www.data.go.kr/dataset/15013685/openapi.do
-- 과수재배변동정보
-https://www.data.go.kr/dataset/3061376/openapi.do
-- 농산물이력관리정보조회서비스
-https://www.data.go.kr/dataset/15000761/openapi.do
