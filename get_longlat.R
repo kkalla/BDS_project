@@ -1,18 +1,21 @@
 library(httr)
 library(jsonlite)
-files <- dir('Data/gg_public_assets')
-data_list <- list()
+###############################################################################
+## make_full_address => make address column and returns dataframe
+## get_geocode => returns longitude and latitude using naver map api
+###############################################################################
+
 
 clientID <- read.csv('naver_api.txt',header=FALSE,stringsAsFactor=FALSE)[2,1]
 clientSecret <-read.csv('naver_api.txt',header=FALSE,
                         stringsAsFactor=FALSE)[2,2]
 
-for(i in 1:32){
-    data_list[[i]] <- read.csv(paste('Data/gg_public_assets/',files[i],sep=""))
-    df <- data_list[[i]]
-    df$address <- paste(df$시군구명,df$읍면동명,df$리명,df$본번,"-",df$부번)
+make_full_address <- function(df){
+    ## Parameter = dataframe (includes 시군구명,읍면동명,리명,본번,부번)
+    df$address <- paste(df[,9],df[,10],df[,11],df[,12],"-",df[,13])
     df$address <- gsub("NA","",df$address)
-    data_list[[i]] <- df
+    df$address <- gsub(" - 0","",df$address)
+    return(df)
 }
 
 get_geocode <- function(adr){
@@ -22,7 +25,6 @@ get_geocode <- function(adr){
     lonlat <- data.frame()
     for(i in 1:n){
         adr_i <- adr[i]
-        adr_i <- gsub(" - 0","",adr_i)
         adr_i <- URLencode(adr_i)
         request_url <- paste(api,"?query=",adr_i,sep="")
         geo_json <- GET(request_url,
@@ -31,25 +33,16 @@ get_geocode <- function(adr){
         if(geo_json$status_code == 200){
             geo <- fromJSON(toJSON(content(geo_json)))
             lonlat <- rbind(lonlat,geo$result$items$point)
-        } else {
-            ## If error occurs
+        } else if(geo_json$status_code == 404){
+            ## No results
             lonlat <- rbind(lonlat,c(x=999,y=999))
+        } else if(geo_json$status_code == 400){
+            ## Incorrect query request
+            lonlat <- rbind(lonlat,c(x=888,y=888))
+        } else{
+            ## Other errors
+            lonlat <- rbind(lonlat,c(x=777,y=777))
         }
     }
     return(lonlat)
-}
-
-
-
-sub <- data_list
-for(i in 17:32){
-    
-    lonlat <- get_geocode(data_list[[i]]$address)
-    sub[[i]]$longitude <- as.numeric(lonlat[,1])
-    sub[[i]]$latitude <- as.numeric(lonlat[,2])
-}
-
-## write csv file
-for(i in 17:32){
-    write.csv(sub[[i]],paste('Data/',files[i],sep=""))
 }
