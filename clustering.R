@@ -21,13 +21,13 @@ str(ana_data2)
 
 ## clustering
 library(cluster)
-d_matrix <- daisy(ana_data2[,-c(1,2)],metric="gower")
+d_matrix <- daisy(ana_data2[,-c(1,2,4,5)],metric="gower")
 h <- hclust(d_matrix)
 plot(h)
 library(fpc)
 
 clust <- numeric(20)
-for(k in 2:20){
+for(k in 3:20){
     clust[[k]] <- pam(d_matrix,k)$silinfo$avg.width
     k.best <- which.max(clust)
 }
