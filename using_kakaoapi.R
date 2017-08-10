@@ -37,7 +37,7 @@
 library(httr)
 library(jsonlite)
 
-categories = c("MT1", "CS2","PS3","SC4", "AC5","PK6"," OL7"," SW8","BK9","CT1",
+categories = c("MT1","CS2","PS3","SC4", "AC5","PK6","OL7","SW8","BK9","CT1",
                "AG2","PO3","AT4","AD5","FD6","CE7","HP8","PM9")
 api_key <- read.csv("kakao_api_key.txt",skip = 1,header = FALSE,
                     stringsAsFactors = FALSE)[1,1]
@@ -46,7 +46,7 @@ url <- "https://dapi.kakao.com/v2/local/search/category.json"
 nearBySearch <- function(category_group_code=
                              c("MT1", "CS2","PS3","SC4", "AC5","PK6","OL7",
                                "SW8","BK9","CT1","AG2","PO3","AT4","AD5",
-                               "FD6","CE7","HP8","PM9")[16], x, y, radius=5000,
+                               "FD6","CE7","HP8","PM9")[15], x, y, radius=5000,
                          page=1,size=15,sort=c("distance","accuracy")[2]){
     # Parameters
     # ---------------
@@ -60,7 +60,8 @@ nearBySearch <- function(category_group_code=
     #       (default = accuracy)
     # Returns
     # --------------
-    result <- list()
+    
+    results_ <- list()
     ## Check validation of parameters
     if(length(category_group_code)>1){
         return(print("Error: Two or more category group are selected!"))
@@ -79,7 +80,7 @@ nearBySearch <- function(category_group_code=
     }
     
     if(page<1 || page>45 || !is.numeric(page)){
-        return(print("Error: Invalid radius"))
+        return(print("Error: Invalid page"))
     }else{
         page <- paste0("&page=",page)
     }
@@ -95,16 +96,24 @@ nearBySearch <- function(category_group_code=
     ## make request url
     request_url <- paste0(url,category,coord,radius,page,size,sort)
     ## get result
-    first_result <- get_result(url)
-    pageble_count <- first_result$meta$pageable_count
-    if(pageble_count>1){
-        for(i in 1:(pageble_count-1)){
-            result[[i]] <- get_result(request_url)$document
-            page <- paste0("&page=",i+1)
+    result <- get_result(request_url)
+    results_[[1]] <- result
+    total_count <- result$meta$total_count
+    page_num <- round(total_count/15,0)
+    if(page_num>3){
+        for(i in 2:3){
+            page <- paste0("&page=",i)
             request_url <- paste0(url,category,coord,radius,page,size,sort)
+            results_[[i]] <- get_result(request_url)
+        }
+    }else{
+        for(i in 2:page_num){
+            page <- paste0("&page=",i)
+            request_url <- paste0(url,category,coord,radius,page,size,sort)
+            results_[[i]] <- get_result(request_url)
         }
     }
-    return(result)
+    return(results_)
 }
 
 get_result <- function(request_url){
@@ -118,20 +127,21 @@ get_result <- function(request_url){
     response <- GET(request_url,
                     add_headers(Authorization=paste("KakaoAK",api_key)))
     ##Check error and save result
-    if(response$status_code != 200){
-        return(print(c("Error : status_code = ",response$status_code)))
-    }else{
+    if(response$status_code == 200){
         # save result of page1
         result <- fromJSON(toJSON(content(response)))
         return(result)
+        
+    }else{
+        return(print(c("Error : status_code = ",response$status_code)))
     }
 }
 
 get_total_count <- function(category_group_code=
-                                c("MT1", "CS2","PS3","SC4", "AC5","PK6","OL7",
+                                c("MT1", "CS2","PS3","SC4","AC5","PK6","OL7",
                                   "SW8","BK9","CT1","AG2","PO3","AT4","AD5",
                                   "FD6","CE7","HP8","PM9")[16], x, y, 
-                            radius=5000,sort=c("distance","accuracy")){
+                            radius=5000,sort=c("distance","accuracy")[2]){
     request_url <- paste0(url,
                           "?category_group_code=",category_group_code,
                           "&x=",x,"&y=",y,"&radius=",radius,
