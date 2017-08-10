@@ -12,3 +12,7 @@ http://www.climate.go.kr/home/bbs/view.php?code=71&bname=scenario&vcode=4673&ski
 ----------------------------------------------------------------------------------------
 공공데이터 포털
 
+
+------------------------------------------------------------------------------------------
+토지이용규제정보
+http://luris.molit.go.kr/web/actreg/arservice/ArLandUsePrintFrame.jsp

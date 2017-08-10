@@ -2,7 +2,8 @@ library(httr)
 library(jsonlite)
 ###############################################################################
 ## make_full_address => make address column and returns dataframe
-## get_geocode => returns longitude and latitude using naver map api
+## get_geocode => returns dataframe with
+##                longitude and latitude using naver map api
 ###############################################################################
 
 
@@ -23,6 +24,7 @@ get_geocode <- function(adr){
     n <- length(adr)
     api <- 'https://openapi.naver.com/v1/map/geocode'
     lonlat <- data.frame()
+    start <- Sys.time()
     for(i in 1:n){
         adr_i <- adr[i]
         adr_i <- URLencode(adr_i)
@@ -32,17 +34,20 @@ get_geocode <- function(adr){
                                     'X-Naver-Client-Secret'=clientSecret))
         if(geo_json$status_code == 200){
             geo <- fromJSON(toJSON(content(geo_json)))
-            lonlat <- rbind(lonlat,geo$result$items$point)
+            points <- unlist(geo$result$items$point)
+            lonlat <- rbind(lonlat,data.frame(x=points[1],y=points[2]))
         } else if(geo_json$status_code == 404){
             ## No results
-            lonlat <- rbind(lonlat,c(x=999,y=999))
+            lonlat <- rbind(lonlat,data.frame(x=999,y=999))
         } else if(geo_json$status_code == 400){
             ## Incorrect query request
-            lonlat <- rbind(lonlat,c(x=888,y=888))
+            lonlat <- rbind(lonlat,data.frame(x=888,y=888))
         } else{
             ## Other errors
-            lonlat <- rbind(lonlat,c(x=777,y=777))
+            lonlat <- rbind(lonlat,data.frame(x=777,y=777))
         }
     }
+    print(paste('Exe time:',Sys.time() - start))
     return(lonlat)
 }
+
