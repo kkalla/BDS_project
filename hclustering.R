@@ -1,0 +1,39 @@
+file_names_ <- dir('Data/ggpa2')
+source('make_data_for_clustering.R',encoding = "UTF-8")
+## Preprocessing - 시간이 오래걸림 주의!
+for(i in 4:4){
+    data <- read.csv(paste0("Data/ggpa2/",file_names_[i]),stringsAsFactor=FALSE)
+    radius=1000
+    ana_data <- make_tidy(data,radius)
+    colnames_ <- colnames(ana_data)
+    colnames_[1] <- "asset_ID"
+    colnames(ana_data) <- colnames_
+    ana_data2 <- ana_data[!(ana_data$longitude==999),]
+    ana_data2$valueBysize1 <- ana_data2$valueBysize1/10000
+    ana_data2$valueBysize2 <- ana_data2$valueBysize2/10000
+    
+    write.csv(ana_data2,paste0('Data/clust_data/',substr(file_names_[i],1,7),
+                               '_r',radius,'.csv'),row.names = F)
+    
+}
+
+
+sub1 <- ana_data2[,-c(1,2,3,5)]
+sub2 <- ana_data2[,-c(1,2,3,6)]
+
+
+## Do clustering
+library(cluster)
+d_matrix <- daisy(sub1,metric="gower")
+method = c("single","complete","centroid","average","median","mcquitty",
+           "ward.D","ward.D2")
+clust_results_ <- list()
+for(i in 1:length(method)){
+    hc <- hclust(d_matrix,method=method[i])
+    clust_results_[[i]] <- hc
+}
+library(fpc)
+par(mfrow=c(1,4))
+for(i in 5:8){
+    plot(clust_results_[[i]])
+}

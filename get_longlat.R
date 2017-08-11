@@ -51,3 +51,9 @@ get_geocode <- function(adr){
     return(lonlat)
 }
 
+cbind_lonlat <- function(df){
+    ## returns dataframe with longitude and latitude as columns
+    lonlat <- get_geocode(df$address)
+    result <- cbind(df,lonlat)
+    return(result)
+}
