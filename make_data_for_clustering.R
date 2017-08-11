@@ -96,7 +96,7 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
     category_sum <- sum_by_category(sub1,categories,radius)
     valueBysize1 <- sub1$대장가액.원. / sub1$재산면적
     valueBysize2 <- sub1$기준가액.원. / sub1$재산면적
-    result <- cbind(sub1[,variables],lonlat,size_factor,valueBysize1,
+    result <- cbind(sub1,lonlat,size_factor,valueBysize1,
                     valueBysize2,category_sum)
     print(paste("Total exe :",Sys.time()-total_exetime_start))
     return(result)
