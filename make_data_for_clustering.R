@@ -94,10 +94,40 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
     }
     sub1 <- cbind(sub1,lonlat)
     category_sum <- sum_by_category(sub1,categories,radius)
-    valueBysize1 <- sub1$대장가액.원. / sub1$재산면적
-    valueBysize2 <- sub1$기준가액.원. / sub1$재산면적
-    result <- cbind(sub1,lonlat,size_factor,valueBysize1,
+    if(sub1$재산면적!=0){
+        valueBysize1 <- sub1$대장가액.원. / sub1$재산면적
+        valueBysize2 <- sub1$기준가액.원. / sub1$재산면적
+    }else{
+        valueBysize1 <- sub1$대장가액.원.
+        valueBysize2 <- sub1$기준가액.원.
+    }
+    
+    result <- cbind(sub1,size_factor,valueBysize1,
                     valueBysize2,category_sum)
     print(paste("Total exe :",Sys.time()-total_exetime_start))
     return(result)
+}
+
+get_distance <- function(p1,p2,formula = "haversine"){
+    # Parameters
+    # -------------
+    # p1, p2: vector c(lon,lat)
+    #   거리계산하고 싶은 두 지점의 좌표값
+    # formula: choose formula used to calculate distance
+    #
+    # Returns
+    # --------------
+    # d: num
+    #   distance between two points
+    R <- 6371 # mean radius of earth
+    if(formula == "haversine"){
+        phi_1 <- p1[2]*pi/180
+        phi_2 <- p2[2]*pi/180
+        delta_pi <- phi_2 - phi_1
+        delta_lambda <- (p2[1]*pi/180 - p1[1]*pi/180)
+        
+        a <- sin(delta_pi/2)^2 + cos(phi_1)*cos(phi_2)*(sin(delta_lambda/2)^2)
+        c <- 2*atan2(sqrt(a),sqrt(1-a))
+        return(R*c)
+    }
 }
