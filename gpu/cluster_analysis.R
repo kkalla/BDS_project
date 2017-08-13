@@ -1,5 +1,5 @@
 ## Preparing data
-data <- read.csv('Data/clust_data/total1.csv')
+data <- read.csv('Data/clust_data/<file-name>.csv')
 data_features <- data[,-1]
 data_std <- scale(data_features)
 
@@ -28,4 +28,25 @@ for(i in 1:3){
 	fviz_nbclust(data_std,kmeans,method=methods_[i])
 	dev.off()
 }
+# Cluster plot with optimal number of clusters
+km_result <- kmeans(data_std,nc,nstart=25)
+# visualize
+fviz_cluster(km_result,data=data_std,frame.type="convex")+theme_minimal()
 
+# Compute PAM
+pam_res <- pam(data_std,nc)
+fviz_cluster(pam_res)
+
+
+# 2. Hierarchical clustering
+d <- dist(data_std,method="euclidean")
+h_res <- hclust(d,method="ward.D2")
+# Cut tree into several groups
+grp <- cutree(h_res,k=4)
+# Visualize
+plot(h_res,cex=0.6,labels=FALSE)
+rect.hclust(h_res,k=4,border=2:5) # add rectangle
+
+## using factoextra
+h_res <- hcut(data_std,k=4)
+fviz_dend(h_res,rect=TRUE,cex=0.5,k_colors=c("red","yellow","green","blue"))

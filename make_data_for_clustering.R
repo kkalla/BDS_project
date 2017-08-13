@@ -41,6 +41,7 @@ sum_by_category <- function(
 ## cbind with subset
 # ana_data <- cbind(sub3,totals_)
 
+
 make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
                       isLonglat=FALSE,
                       except = c("공원","공장용지","과수원","구거","답","대",
@@ -76,6 +77,10 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
     total_exetime_start <- Sys.time()
     sub1 <- df[!df$실지목명 %in% except,]
     sub1 <- sub1[!is.na(sub1$재산면적),]
+    if(nrow(sub1)>5500){
+        n <- sample(nrow(sub1),5500)
+        sub1 <- sub1[n,]
+    }
     if(!isLonglat){
         source('get_longlat.R')
         start <- Sys.time()
@@ -93,6 +98,7 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
         size_factor <- as.factor(size_factor)
     }
     sub1 <- cbind(sub1,lonlat)
+    sub1 <- sub1[sub1$longitude<777,]
     category_sum <- sum_by_category(sub1,categories,radius)
     if(sub1$재산면적!=0){
         valueBysize1 <- sub1$대장가액.원. / sub1$재산면적
