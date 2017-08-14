@@ -88,6 +88,8 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
         colnames(lonlat)<- c("longitude","latitude")
         print(paste("Get lon&lat in",Sys.time()-start))
     }
+    sub1 <- cbind(sub1,lonlat)
+    sub1 <- sub1[sub1$longitude<777,]
     if(sizeAsFactor){
         size_factor <- sapply(sub1$재산면적,function(x) {
             if(x<300) x=1
@@ -97,8 +99,7 @@ make_tidy <- function(df,variables=c("재산번호"),sizeAsFactor=TRUE,
         })
         size_factor <- as.factor(size_factor)
     }
-    sub1 <- cbind(sub1,lonlat)
-    sub1 <- sub1[sub1$longitude<777,]
+    
     category_sum <- sum_by_category(sub1,categories,radius)
     if(sub1$재산면적!=0){
         valueBysize1 <- sub1$대장가액.원. / sub1$재산면적

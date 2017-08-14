@@ -40,7 +40,7 @@ library(jsonlite)
 categories = c("MT1","CS2","PS3","SC4", "AC5","PK6","OL7","SW8","BK9","CT1",
                "AG2","PO3","AT4","AD5","FD6","CE7","HP8","PM9")
 api_key <- read.csv("kakao_api_key.txt",skip = 1,header = FALSE,
-                    stringsAsFactors = FALSE)[4,1]
+                    stringsAsFactors = FALSE)[2,1]
 url <- "https://dapi.kakao.com/v2/local/search/category.json"
 
 nearBySearch <- function(category_group_code=

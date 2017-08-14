@@ -1,7 +1,7 @@
 file_names_ <- dir('Data/ggpa2')
 source('make_data_for_clustering.R',encoding = "UTF-8")
 ## Preprocessing - 시간이 오래걸림 주의!
-for(i in c(18)){
+for(i in c(16)){
     data <- read.csv(paste0("Data/ggpa2/",file_names_[i]),stringsAsFactor=FALSE)
     radius=1000
     ana_data <- make_tidy(data,radius)

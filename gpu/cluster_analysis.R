@@ -1,7 +1,35 @@
 ## Preparing data
-data <- read.csv('Data/clust_data/<file-name>.csv')
+file_names_ <- dir('Data/clust_data')
+data_lists_ <- list()
+sub_lists_ <- list()
+for(i in 1:length(file_names_)){
+	data_lists_[[i]]<- read.csv(paste0('Data/clust_data/',file_names_[i]))
+	n <- length(colnames((data_lists_[[i]])))
+	if(n>30)
+		sub <- data_lists_[[i]][,c(1:2,n-20,((n-18):n))]
+	else
+		sub <- data_lists_[[i]]
+	sub_lists_[[i]] <- sub
+}
+for(i in 1:length(sub_lists_)){
+	if(sub_lists_[[i]]$asset_ID[1] == 2015){
+		col_names_ <- colnames(sub_lists_[[i]])
+		col_names_[2] <- "asset_ID"
+		colnames(sub_lists_[[i]]) <- col_names_
+		sub_lists_[[i]] <- sub_lists_[[i]][,c(-1)]
+	}
+}
+col_names_ <- colnames(sub_lists_[[19]])
+for(i in 1:length(sub_lists_)){
+	sub_lists_[[i]]<-sub_lists_[[i]][,col_names_]
+}
+data <- data.frame()
+for(i in 1:length(sub_lists_)){
+	data <- rbind(data,sub_lists_[[i]])
+}
 data_features <- data[,-1]
-data_std <- scale(data_features)
+data_std <- scale(data_features[data_features$valueBysize2 != Inf | 
+		  !is.na(data_features$valueBysize2),-1])
 
 ## Clarifying distance measures
 # install.packages("factoextra")
@@ -22,12 +50,12 @@ for(i in 1:2){
 # Partitioning clustering
 # 1. kmeans
 # Compute and visualize k-menas clustering
+pdf("fviz_nbclust.pdf")
 for(i in 1:3){
 	methods_ <- c("silhouette","wss","gap_stat")
-	png(paste0("fviz_nbclust_",methods_[i],".png"))
 	fviz_nbclust(data_std,kmeans,method=methods_[i])
-	dev.off()
 }
+dev.off()
 # Cluster plot with optimal number of clusters
 km_result <- kmeans(data_std,nc,nstart=25)
 # visualize
