@@ -7,7 +7,8 @@
 ## APMM_NV_LAND.txt -> colnames in xlsx file
 
 ## sample data = Data/public_fc/gov/gg_gov.csv
-
+file_path = "Data/public_fc/gov/gg_gov.csv"
+data <- get_name_addr(path="Data/public_fc/gov/gg_gov.csv")
 get_name_addr <- function(path="Data/public_fc/gov/gg_gov.csv"){
     # dataset에서 장소이름과 주소만 반환
     # Param
@@ -57,6 +58,8 @@ make_bobubn <- function(data){
     # list: 본번 부번이 있는 list / 번지가 없으면 "번지없음"으로 표시
     
     addr <- strsplit(data$address," ")
+    
+    
     bobubn <- lapply(addr,function(x){
         result <- c()
         for(i in 1:length(x)){
@@ -67,23 +70,31 @@ make_bobubn <- function(data){
     })
     bobubn <- lapply(bobubn,function(x){
         if(is.null(x))
-            x<-"None"
-        else
-            x<-trimws(x,"left")})
-    bobubn <- unlist(bobubn)
-    result <- list()
-    for(i in 1:length(bobubn)){
-        if(bobubn[i] != "None"){
-            a <- bobubn[i]
-            a <- substr(a,1,(stringr::str_length(a)-2))
-            a <- strsplit(a,"-")
-        }
+            x <- "None"
         else{
-            a <- "None"
+            x <- unlist(strsplit(x,"번지"))
+            x <- unlist(strsplit(x,"-"))
         }
-        result[[i]] <- a
-    }
-    return(result)
+    })
+    # bobubn <- lapply(bobubn,function(x){
+    #     if(is.null(x))
+    #         x<-"None"
+    #     else
+    #         x<-trimws(x,"left")})
+    # bobubn <- unlist(bobubn)
+    # result <- list()
+    # for(i in 1:length(bobubn)){
+    #     if(bobubn[i] != "None"){
+    #         a <- bobubn[i]
+    #         a <- substr(a,1,(stringr::str_length(a)-2))
+    #         a <- strsplit(a,"-")
+    #     }
+    #     else{
+    #         a <- "None"
+    #     }
+    #     result[[i]] <- a
+    # }
+    return(bobubn)
 }
 
 sgg_cd <- read.csv('Data/SGG_CD.txt',sep='\t',stringsAsFactors = FALSE)
@@ -115,68 +126,43 @@ get_variables <- function(file_path){
         sgg <- get_sgg_code(sggs_[i])
         sgg_codes_[i] <- sgg
     }
+    pnus_ <- make_pnu(sgg_codes_,bobubns_)
     variable_names_ <- c('PNILP','PAREA','JIMOK','SPFC1','SPFC2','LAND_USE',
                          'GEO_HL','GEO_FORM','ROAD_SIDE')
     result_ <- data.frame()
-    for(i in 1:length(sgg_codes_)){
-        if(bobubns_[[i]] != "None"){
-            bobn <- as.numeric(unlist(bobubns_[[i]][1]))
-            if(length(bobubns_[[i]])>1){
-                bubn <- as.numeric(unlist(bobubns_[[i]][2]))
-                result <- apmm_nv_land[
-                    sgg_codes_[i]==as.numeric(substr(apmm_nv_land$PNU,1,10)) & 
-                        bobn == as.numeric(apmm_nv_land$BOBN) & 
-                        bubn == as.numeric(apmm_nv_land$BUBN),variable_names_]
-            }
-            else{
-                result <- apmm_nv_land[
-                    sgg_codes_[i]==as.numeric(substr(apmm_nv_land$PNU,1,10)) & 
-                        bobn == as.numeric(apmm_nv_land$BOBN),variable_names_]
-            } 
-        }else{
-            result <- rep(0,length(variable_names_))
-        }
-        result_ <- rbind(result_,result)
-        
-    }
+    
     return(result_)
 }
 make_pnu <- function(sgg_codes_,bobubns_){
-    sub1 <- c()
+    sub1 <- as.character(sgg_codes_)
     sub2 <- c()
-    for(i in 1:length(sgg_codes_)){
-        sub1 <- c(sub1,sgg_codes_)
-    }
+    sub3 <- c()
     for(i in 1:length(bobubns_)){
-        if(bobubns_[[i]] != "None"){
-            if(length(bobubns_[[i]][1])>1){
-                bb <- unlist(bobubns_[[i]][1])
-                if(stringr::str_length(bb[1])<4)
-                    zeros <- as.character(rep(0,(4-stringr::str_length(bb[1]))))
-                bb[1] <- paste(zeros,bb[1],sep="")
-                if(stringr::str_length(bb[2])<4)
-                    zeros <- as.character(rep(0,(4-stringr::str_length(bb[2]))))
-                bb[2] <- paste(zeros,bb[2],sep="")
-                
-                aa <- paste(bb[1],bb[2],sep="")
-        
-            } else{
-                bb <- unlist(bobubns_[[i]][1])
-                if(stringr::str_length(bb)<4)
-                    zeros <- as.character(rep(0,(4-stringr::str_length(bb))))
-                bb <- paste(zeros,bb,sep="")
-                aa <- paste(bb[1],
-                                   "0000",sep="")
-               
+        if(length(bobubns_[[i]]) > 1){
+            aa <- trimws(bobubns_[[i]][1],"left")
+            bb <- bobubns_[[i]][2]
+            if(stringr::str_length(aa)<4){
+                zeros <- stringr::str_dup("0",4-stringr::str_length(aa))
+                aa <- paste(paste0(zeros),aa,sep="")
             }
+            if(stringr::str_length(bb)<4){
+                zeros <- stringr::str_dup("0",4-stringr::str_length(bb))
+                bb <-paste(zeros,bb,sep="")
+            }
+        }else if(bobubns_[[i]]=="None"){
+            aa <- "0000";bb<-"0000"
         }else{
-            aa <- "00000000"
+            aa <- trimws(bobubns_[[i]],"left")
+            if(stringr::str_length(aa)<4){
+                zeros <- stringr::str_dup("0",4-stringr::str_length(aa))
+                aa <- paste(zeros,aa,sep="")
+            }
+            bb <- "0000"
         }
-        sub2[i] <- aa
+        sub2 <- c(sub2,aa)
+        sub3 <- c(sub3,bb)
     }
-    result <- data.frame(sub1,sub2,stringsAsFactors = FALSE)
+    result <- data.frame(sub1,sub2,sub3,stringsAsFactors = FALSE)
     return(result)
 }
-unlist(bobubns_[[602]][1])[2]
-data2 <- get_variables("Data/public_fc/gov/gg_gov.csv")
-aaa <- make_pnu(sgg_codes_,bobubns_)
+aa <- make_pnu(sgg_codes_,bobubns_)
