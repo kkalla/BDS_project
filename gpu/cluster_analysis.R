@@ -27,24 +27,36 @@ data <- data.frame()
 for(i in 1:length(sub_lists_)){
 	data <- rbind(data,sub_lists_[[i]])
 }
-data_features <- data[,-1]
-data_std <- scale(data_features[data_features$valueBysize2 != Inf | 
-		  !is.na(data_features$valueBysize2),-1])
+data <- data[!is.na(data$valueBysize2) & data$valueBysize2 !=Inf,]
+data_features <- data[,-c(1:2)]
+data_std <- as.data.frame(scale(data_features))
+# Sampling
+n <- nrow(data_std)
+sample_numbers_ <- list()
+for(i in 1:10){
+	sample_numbers_[[i]] <- sample(n,5000,replace=FALSE)
+}
+subs_ <- list()
+for(i in 1:10){
+	subs_[[i]] <- data_std[sample_numbers_[[i]],]
+}
+
+
 
 ## Clarifying distance measures
 # install.packages("factoextra")
 library(cluster)
 library(factoextra)
 # get dist takes a few seconds
-dists_ <- list(euclid = get_dist(data_std,method="euclidean"),
-	       pearson = get_dist(data_std,method="pearson"))
-for(i in 1:2){
-	names_ <- c("Euclidean","Pearson")
-	png(paste0("fviz_dist_",names_[i],".png"))
-	fviz_dist(dists_[[i]],show_labels=FALSE,
-		  gradient = list(low="#00AFBB",mid="white",high="#FC4E07"))
-	dev.off()
-}
+#dists_ <- list(euclid = get_dist(data_std,method="euclidean"),
+#	       pearson = get_dist(data_std,method="pearson"))
+#for(i in 1:2){
+#	names_ <- c("Euclidean","Pearson")
+#	png(paste0("fviz_dist_",names_[i],".png"))
+#	fviz_dist(dists_[[i]],show_labels=FALSE,
+#		  gradient = list(low="#00AFBB",mid="white",high="#FC4E07"))
+#	dev.off()
+#}
 
 ## Basic clustering methods
 # Partitioning clustering
@@ -53,7 +65,7 @@ for(i in 1:2){
 pdf("fviz_nbclust.pdf")
 for(i in 1:3){
 	methods_ <- c("silhouette","wss","gap_stat")
-	fviz_nbclust(data_std,kmeans,method=methods_[i])
+	fviz_nbclust(subs_[[1]],kmeans,method=methods_[i])
 }
 dev.off()
 # Cluster plot with optimal number of clusters
