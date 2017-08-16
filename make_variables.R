@@ -1,5 +1,10 @@
 ###############################################################################
 ## 텍스트 파일에서 정보추출하기 위한 소스
+## Import 할때 시간이 조금 걸립니다.(텍스트파일 reading때문에)
+## working directory -- Data -- SGG_CD.txt
+##                            |                      
+##                           -- APMM_NV_LAND -- APMM_NV_LAND.txt
+## 위 두개의 txt 파일이 필요함.
 ###############################################################################
 
 ## 공공기관데이터 -> address, longitude, latitude
@@ -7,8 +12,8 @@
 ## APMM_NV_LAND.txt -> colnames in xlsx file
 
 ## sample data = Data/public_fc/gov/gg_gov.csv
-file_path = "Data/public_fc/gov/gg_gov.csv"
-data <- get_name_addr(path="Data/public_fc/gov/gg_gov.csv")
+ file_path = "Data/public_fc/gov/gg_gov.csv"
+
 get_name_addr <- function(path="Data/public_fc/gov/gg_gov.csv"){
     # dataset에서 장소이름과 주소만 반환
     # Param
@@ -32,7 +37,7 @@ make_sgg <- function(data){
     #
     # Returns
     # --------
-    # character vactor: 본번 부번이 빠진 
+    # character vector: 본번 부번이 빠진 
     
     addr <- strsplit(data$address," ")    
     c_lists_ <- lapply(addr,function(x) {
@@ -115,24 +120,57 @@ get_sgg_code <- function(sgg){
 }
 apmm_nv_land <- read.csv('Data/APMM_NV_LAND/APMM_NV_LAND.txt',sep = '|',
                          stringsAsFactors = FALSE)
-get_variables <- function(file_path){
-    #분석에 필요한 variables 반환
+get_variables <- function(file_path,
+                          variable_names_=c('PNU','PNILP','PAREA','JIMOK',
+                                            'SPFC1','SPFC2','LAND_USE','GEO_HL',
+                                            'GEO_FORM','ROAD_SIDE')){
+    # Returns dataframe with variables to analyze
+    # Params
+    # ------
+    # file_path
+    # variable_names_
+    #
+    # Returns
+    # -------
+    # dataframe
+    origin_data <- read.csv(file_path,stringsAsFactors = FALSE)
     data <- get_name_addr(file_path)
     sggs_ <- make_sgg(data)
     bobubns_ <- make_bobubn(data)
     sgg_codes_ <- c()
-    # 이게 왜 오래걸리지?
+    # It takes some time
     for(i in 1:length(sggs_)){
         sgg <- get_sgg_code(sggs_[i])
         sgg_codes_[i] <- sgg
     }
     pnus_ <- make_pnu(sgg_codes_,bobubns_)
-    variable_names_ <- c('PNILP','PAREA','JIMOK','SPFC1','SPFC2','LAND_USE',
-                         'GEO_HL','GEO_FORM','ROAD_SIDE')
-    result_ <- data.frame()
     
+    result_ <- data.frame(row.names = FALSE)
+    # Takes some time
+    for(i in 1:nrow(pnus_)){
+        vars <- c()
+        if(pnus_$sub1[i]!="0"){
+            j <- 0
+            while(j < 10){
+                my_pnu <- paste0(pnus_$sub1[i],j,pnus_$sub2[i],pnus_$sub3[i])
+                vars <- apmm_nv_land[apmm_nv_land$PNU==my_pnu &
+                                         apmm_nv_land$PNILP > 0,variable_names_]
+                if(nrow(vars)!=0)
+                    break
+                j <- j + 1
+            }
+            if(nrow(vars)==0)
+                vars <- rep("0",length(variable_names_))
+        }else{
+            vars <- rep("0",length(variable_names_))
+        }
+        result_ <- rbind(result_,vars)
+    }
+    result_ <- cbind(origin_data[,c("name","address","longitude","latitude")],
+                       result_)
     return(result_)
 }
+
 make_pnu <- function(sgg_codes_,bobubns_){
     sub1 <- as.character(sgg_codes_)
     sub2 <- c()
@@ -165,4 +203,4 @@ make_pnu <- function(sgg_codes_,bobubns_){
     result <- data.frame(sub1,sub2,sub3,stringsAsFactors = FALSE)
     return(result)
 }
-aa <- make_pnu(sgg_codes_,bobubns_)
+
