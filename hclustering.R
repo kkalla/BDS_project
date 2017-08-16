@@ -8,10 +8,10 @@ for(i in c(16)){
     colnames_ <- colnames(ana_data)
     colnames_[2] <- "asset_ID"
     colnames(ana_data) <- colnames_
-    ana_data2$valueBysize1 <- ana_data2$valueBysize1/10000
-    ana_data2$valueBysize2 <- ana_data2$valueBysize2/10000
+    ana_data$valueBysize1 <- ana_data$valueBysize1/10000
+    ana_data$valueBysize2 <- ana_data$valueBysize2/10000
     
-    write.csv(ana_data2,paste0('Data/clust_data/',substr(file_names_[i],1,7),
+    write.csv(ana_data,paste0('Data/clust_data/',substr(file_names_[i],1,7),
                                '_r',radius,'.csv'),row.names = F)
     
 }

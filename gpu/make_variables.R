@@ -12,8 +12,8 @@
 ## APMM_NV_LAND.txt -> colnames in xlsx file
 
 ## sample data = Data/public_fc/gov/gg_gov.csv
- file_path = "Data/SW_COUNT/5.sports_facility_SW_count.csv"
-data <- read.csv(file_path,stringsAsFactors = F)
+ file_path = "Data/public_fc/gov/gg_gov.csv"
+
 get_name_addr <- function(path="Data/public_fc/gov/gg_gov.csv"){
     # dataset에서 장소이름과 주소만 반환
     # Param
@@ -159,27 +159,15 @@ get_variables <- function(file_path,
                     break
                 j <- j + 1
             }
-            if(nrow(vars)==0){
+            if(nrow(vars)==0)
                 vars <- rep("0",length(variable_names_))
-                vars <- data.frame(t(vars),stringsAsFactors = FALSE)
-                colnames(vars)<-variable_names_
-            }
-            ?data.frame
         }else{
             vars <- rep("0",length(variable_names_))
-            vars <- data.frame(t(vars),stringsAsFactors = FALSE)
-            colnames(vars)<-variable_names_
         }
         result_ <- rbind(result_,vars)
     }
-    if(nrow(result_)>nrow(origin_data)){
-        n <- nrow(origin_data)
-    }else
-        n <- nrow(result_)
-    result_ <- result_[1:n,]
-    origin_data <- origin_data[1:n,]
-    result_ <- cbind(origin_data[,c("category","address","longitude","latitude",
-                                    "SW8","dist_nearestRV")],result_)
+    result_ <- cbind(origin_data[,c("name","address","longitude","latitude")],
+                       result_)
     return(result_)
 }
 
@@ -212,9 +200,6 @@ make_pnu <- function(sgg_codes_,bobubns_){
         sub2 <- c(sub2,aa)
         sub3 <- c(sub3,bb)
     }
-    n <- length(sub1)
-    sub2 <- sub2[1:n]
-    sub3 <- sub3[1:n]
     result <- data.frame(sub1,sub2,sub3,stringsAsFactors = FALSE)
     return(result)
 }
