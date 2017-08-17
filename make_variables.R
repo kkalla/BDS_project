@@ -12,8 +12,8 @@
 ## APMM_NV_LAND.txt -> colnames in xlsx file
 
 ## sample data = Data/public_fc/gov/gg_gov.csv
- file_path = "Data/SW_COUNT/5.sports_facility_SW_count.csv"
-data <- read.csv(file_path,stringsAsFactors = F)
+# file_path = "Data/SW_COUNT/5.sports_facility_SW_count.csv"
+#data <- read.csv(file_path,stringsAsFactors = F)
 get_name_addr <- function(path="Data/public_fc/gov/gg_gov.csv"){
     # dataset에서 장소이름과 주소만 반환
     # Param
