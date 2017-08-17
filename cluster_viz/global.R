@@ -1,6 +1,7 @@
 library(dplyr)
 
-suwon_pbassets <- read.csv('Data/Suwon_r1000.csv',stringsAsFactors = F)
+suwon_r1000 <- read.csv('Data/suwon_clustered.csv',stringsAsFactors = F)
+suwon_r500 <- read.csv('Data/suwon_r500_clustered.csv',stringsAsFactors = F)
 thunder_api_key <- read.csv('Data/api_keys.txt',
                             stringsAsFactors = F)$thunderforest
 
