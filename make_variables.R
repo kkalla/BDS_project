@@ -5,7 +5,7 @@
 ##                            |                      
 ##                           -- APMM_NV_LAND -- APMM_NV_LAND.txt
 ## 위 두개의 txt 파일이 필요함.
-## downloaded here : 
+## downloaded at here : http://market.nsdi.go.kr/goods/detail.do?gno=15128
 ###############################################################################
 
 ## 공공기관데이터 -> address, longitude, latitude
