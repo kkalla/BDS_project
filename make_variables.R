@@ -5,6 +5,7 @@
 ##                            |                      
 ##                           -- APMM_NV_LAND -- APMM_NV_LAND.txt
 ## 위 두개의 txt 파일이 필요함.
+## downloaded here : 
 ###############################################################################
 
 ## 공공기관데이터 -> address, longitude, latitude
