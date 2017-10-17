@@ -5,6 +5,8 @@ suwon_r500 <- read.csv('Data/suwon_r500_clustered.csv',stringsAsFactors = F)
 pbfc <- read.csv('Data/tot_publicfc.csv')
 thunder_api_key <- read.csv('Data/api_keys.txt',
                             stringsAsFactors = F)$thunderforest
+suwon_all <- read.csv('Data/suwon_all.csv',stringsAsFactors = F)
+suwon_cat_2 <- read.csv('Data/suwon_cat_2.csv',stringsAsFactors = F)
 ## Data preprocessing
 df <- suwon_r500
 df$Mart <- df$MT1 + df$CS2

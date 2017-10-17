@@ -22,6 +22,16 @@ vars_clust = c(
     "3" = 3,
     "4" = 4
 )
+vars_clust2 = c(
+    "All" = "all",
+    "1" = 1,
+    "2" = 2,
+    "3" = 3,
+    "4" = 4,
+    "5" = 5,
+    "6" = 6,
+    "7" = 7
+)
 
 shinyUI(navbarPage("GG", id= "nav",
                    # tabPanel("Public Facility",
@@ -53,6 +63,19 @@ shinyUI(navbarPage("GG", id= "nav",
                                               height="auto",
                                               
                                               selectInput("clust","Cluster",vars_clust)
+                                              
+                                )
+                            )),
+                   tabPanel("Public assets in the Suwon(subset)",
+                            div(class="outer",
+                                tags$head(includeCSS("styles.css")),
+                                leafletOutput("map2",width="100%",height="100%"),
+                                
+                                absolutePanel(id="controller3",class="panel panel-default",fixed = TRUE,
+                                              draggable=TRUE,top=60,left="auto",right = 20,bottom="auto",width=330,
+                                              height="auto",
+                                              
+                                              selectInput("clust2","Cluster",vars_clust2)
                                               
                                 )
                             ))

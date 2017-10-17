@@ -6,7 +6,8 @@ library(RColorBrewer)
 apikey <- thunder_api_key
 pbfc_summary <- pbfc_summary
 suwon_r500 <- suwon_r500
-
+suwon_all <- suwon_all
+suwon_cat_2 <- suwon_cat_2
 shinyServer(function(input,output,session){
     
     ## Public Facility
@@ -54,8 +55,8 @@ shinyServer(function(input,output,session){
     })
     
     data_select <- reactive({
-        if(input$clust == "all"){return(suwon_r500)}
-        else{data <- suwon_r500[suwon_r500$cluster==as.numeric(input$clust),]
+        if(input$clust == "all"){return(suwon_all)}
+        else{data <- suwon_all[suwon_all$cluster==as.numeric(input$clust),]
         return(data)}
     })
     
@@ -63,12 +64,41 @@ shinyServer(function(input,output,session){
         
             selected_Data <- data_select()
             colorData <- as.factor(as.character(selected_Data$cluster))
-            pal <- colorFactor(brewer.pal(11,'Paired')[sample(11,4)],colorData)
+            pal <- colorFactor(brewer.pal(11,'Paired')[sample(c(2,4,6,8,10,12),4)],colorData)
             leafletProxy("map",data=selected_Data) %>%
                 clearShapes() %>% hideGroup('Cluster') %>%
                 addCircles(~longitude,~latitude,radius=100,group='Circle',fillOpacity = 0.8,
                            fillColor = pal(colorData),stroke=FALSE) %>%
                 addLegend("bottomleft",pal=pal,values=colorData,title="Clusters",layerId = "colorLegend")
+        
+        
+    })
+    output$map2 <- renderLeaflet({
+        leaflet() %>% 
+            addTiles(
+                urlTemplate=
+                    paste0("http://{s}.tile.thunderforest.com/transport/",
+                           "{z}/{x}/{y}.png?apikey=",apikey),
+                attribution = paste0('Maps ©<a href="http://www.thunderforest.com/">Thunderforest</a>, ',
+                                     'Data ©<a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>')) %>%
+            setView(lng=127.015358,lat=37.279293,zoom=12)
+    })
+    data_select2 <- reactive({
+        if(input$clust2 == "all"){return(suwon_cat_2)}
+        else{data <- suwon_cat_2[suwon_cat_2$cluster==as.numeric(input$clust2),]
+        return(data)}
+    })
+    
+    observe({
+        
+        selected_Data2 <- data_select2()
+        colorData2 <- as.factor(as.character(selected_Data2$cluster))
+        pal <- colorFactor(brewer.pal(8,'Dark2')[sample(c(1:8),7)],colorData2)
+        leafletProxy("map2",data=selected_Data2) %>%
+            clearShapes() %>% 
+            addCircles(~longitude,~latitude,radius=100,group='Circle',fillOpacity = 0.8,
+                       fillColor = pal(colorData2),stroke=FALSE) %>%
+            addLegend("bottomleft",pal=pal,values=colorData2,title="Clusters",layerId = "colorLegend")
         
         
     })
