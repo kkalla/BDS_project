@@ -42,6 +42,3 @@ suwon_r500_std <- cbind(asset_ID,feats)
 str(suwon_r500_std)
 write.csv(suwon_r500_std,'gpu/Data/Suwon_r500_std.csv',row.names = F)
 
-library(factoextra)
-install.packages('factoextra')
-?fviz_nbclust
