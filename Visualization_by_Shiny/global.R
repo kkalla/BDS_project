@@ -54,12 +54,22 @@ for(i in 1:length(files)){
   data_list[[i]] = read.csv(paste0('data/',files[i]))
   tmp = data_list[[i]]
   tmp = data.frame(tmp$city, tmp$latitude, tmp$longitude, tmp$공부지목명, tmp$재산면적, tmp$대장가액.원., tmp$avg_price)
-  colnames(tmp) <- c('city','lat', 'lon', 'assets_name', 'size', 'tot_price', 'avg_price')
+  colnames(tmp) <- c('city','lat', 'lon', '재산명칭', 'size', 'tot_price', 'avg_price')
   tmp = tmp[!duplicated(tmp[,c('lat','lon')]),]
   tmp$avg_price = round(tmp$avg_price)
-  tmp$assets_name <- as.character(tmp$assets_name)
+  tmp$재산명칭 <- as.character(tmp$재산명칭)
   tmp$city <- as.character(tmp$city)
   tmp$radius = getRad(tmp$size)
   tmp$avg_price_size = get_avg_price(tmp$tot_price,tmp$size)
   Public_Assets = rbind(Public_Assets,tmp)
 }
+ vector <- c("cemetery","dae", "dap", "factory", "fishery", "forest", "googeo","jeon","levee", "mixed", "oil","orchard", "park","parking","pasture","rail", "religion","river","road", "school", "sports","unknown", "water","garage")
+ vector0 <-c('묘지','대','답','공장용지','양식장','임야','구거','전','제방','잡종지','유지','과수원','공원용지','주차장','목장용지','철도용지','종교용지','하천','도로','학교용지','체육용지','미등록','수도용지','창고용지')
+
+a <- Public_Assets$재산명칭
+
+for(i in 1:length(a)){
+  if(a[i]=='schoo') a[i]<-'school'
+  a[i]<- vector0[vector==a[i]] 
+}
+Public_Assets$재산명칭 <- a

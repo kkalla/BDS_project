@@ -26,37 +26,37 @@ shinyServer(function(input, output, session) {
     if (input$city == 'All') {
       t <- Public_Assets
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
     }
     else if (input$city == 'Gapyeong') {
       t <- filter(Public_Assets, city == input$city)
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
     }
     else if (input$city == 'Gimpo') {
       t <- filter(Public_Assets, city == input$city)
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
     else if (input$city == 'Goyang') {
       t <- filter(Public_Assets, city == input$city)
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
     else if (input$city == 'Gwangju') {
       t <- filter(Public_Assets, city == input$city)
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
     else {
       t <- filter(Public_Assets, city == input$city)
       if (input$type == ''){return(t)}else{
-        t <- filter(t, assets_name == input$type)
+        t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
   })
@@ -69,7 +69,7 @@ shinyServer(function(input, output, session) {
     
     sizeBy <- input$size
     draw <- drawvalue()
-    colorBy <- "assets_name"
+    colorBy <- "재산명칭"
     
     colorData <- draw[[colorBy]]
     set = c(brewer.pal(12,"Paired"),brewer.pal(6,"Set2"),brewer.pal(7, "Set3"))
@@ -108,11 +108,11 @@ shinyServer(function(input, output, session) {
     selectedvc <- filter(draw, lat == latitude, lon == longitude)
     entry <- function(row){
       result <- as.character(tagList(
-        tags$strong(sprintf("assets_name: %s", row[4])), tags$br(),
-        sprintf("lat | lon: %s | %s", row[2],row[3]), tags$br(),
-        sprintf("size: %s", row[5]), tags$br(),
-        sprintf("tot_price: %s", row[6]), tags$br(),
-        sprintf("avg_price: %s", row[7]), tags$br()))
+        tags$strong(sprintf("재산명칭: %s", row[4])), tags$br(),
+        sprintf("위도 | 경도: %s | %s", row[2],row[3]), tags$br(),
+        sprintf("크기: %s", row[5]), tags$br(),
+        sprintf("대장가액: %s", row[6]), tags$br(),
+        sprintf("평균가격: %s", row[7]), tags$br()))
       return(result)
     }
     content <- apply(selectedvc, 1, entry)
@@ -132,3 +132,4 @@ shinyServer(function(input, output, session) {
     })
   })
 })
+

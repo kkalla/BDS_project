@@ -2,51 +2,50 @@ library(shiny)
 library(leaflet)
 
 vars1 <- c(
-  "All" = "All",
-  "Gapyeong" = "Gapyeong",
-  "Gimpo" = "Gimpo",
-  "Goyang" = "Goyang",
-  "Gwangju" = "Gwangju",
-  "Namyangju" = "Namyangju"
+  "모두" = "All",
+  "가평" = "Gapyeong",
+  "김포" = "Gimpo",
+  "고양" = "Goyang",
+  "광주" = "Gwangju",
+  "남양주" = "Namyangju"
 )
 
 vars2 <- c(
-  "Site Area" = "radius",
-  "Avg. price" = "avg_price_size"
+  "크기" = "radius",
+  "면적 당 평균가" = "avg_price_size"
 )
 
 vars3 <- c(
-  "All Types" = "",
-  "Cemetery" = "cemetery",
-  "Dae" = "dae",
-  "Dap" = "dap",
-  "Factory" = "factory",
-  "Fishery" = "fishery",
-  "Forest" = "forest",
-  "Googeo" = "googeo",
-  "Jeon" = "jeon",
-  "Levee" = "levee",
-  "Mixed" = "mixed",
-  "Oil" = "oil",
-  "Orchard" = "orchard",
-  "Park" = "park",
-  "Parking" = "parking",
-  "Pasture" = "pasture",
-  "Rail" = "rail",
-  "Random" = "random",
-  "Religion" = "religion",
-  "River" = "river",
-  "Road" = "road",
-  "School" = "school",
-  "Sports" = "sports",
-  "Unknown" = "unknown",
-  "Water" = "water",
-  "Garage" = "garage"
+  "모두" = "",
+  "묘지" = "cemetery",
+  "대" = "dae",
+  "답" = "dap",
+  "공장용" = "factory",
+  "양어장" = "fishery",
+  "임야" = "forest",
+  "구거" = "googeo",
+  "전" = "jeon",
+  "제방" = "levee",
+  "잡종지" = "mixed",
+  "유지" = "oil",
+  "과수원" = "orchard",
+  "공원" = "park",
+  "주차장" = "parking",
+  "목장용지" = "pasture",
+  "철도용지" = "rail",
+  "종교용지" = "religion",
+  "하천" = "river",
+  "도로" = "road",
+  "학교용지" = "school",
+  "체육용지" = "sports",
+  "미등록" = "unknown",
+  "수도용지" = "water",
+  "창고용지" = "garage"
 )
 
-shinyUI(navbarPage("Gyeonggi-do Public Assets Map", id="nav",
+shinyUI(navbarPage("경기도 공유재산", id="nav",
                    
-                   tabPanel("Interactive map",
+                   tabPanel("인터랙티브 맵",
                             div(class="outer",
                                 
                                 tags$head(
@@ -61,15 +60,15 @@ shinyUI(navbarPage("Gyeonggi-do Public Assets Map", id="nav",
                                               draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                                               width = 330, height = "auto",
                                               
-                                              h2("Public Assets"),
+                                              h2("공유재산"),
                                               
-                                              selectInput("city", "City", vars1, selected = "All"),
-                                              selectInput("size", "Size", vars2, selected = "radius"),
-                                              checkboxInput("cluster", "Add Cluster"),
-                                              helpText("Cluster numbers show total Public assets for each area",
+                                              selectInput("city", "도시", vars1, selected = "All"),
+                                              selectInput("size", "크기", vars2, selected = "radius"),
+                                              checkboxInput("cluster", "클러스터링"),
+                                              helpText("각 지역에 해당하는 전체 공유재산의 수 클러스터링",
                                                        "",
-                                                       "(applies to 'All Types' only)"),
-                                              radioButtons("type", "Show Just One Type", vars3, selected = '')
+                                                       "('모두' 유형에만 적용가능)"),
+                                              radioButtons("type", "재산 유형 선택", vars3, selected = '')
                                 )
                                 )
                               )
