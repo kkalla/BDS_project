@@ -7,11 +7,10 @@ library(dplyr)
 
 draw <- Public_Assets
 
+# 불러온 데이터를 샤이니 앱과 연동하여 돌아가게 하는 서버입니다.
 shinyServer(function(input, output, session) {
   
-  ## Interactive Map ###########################################
-  
-  # Create the map
+  # leaflet 지도를 출력합니다.
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles(
@@ -21,53 +20,52 @@ shinyServer(function(input, output, session) {
       setView(lng = 127.1949, lat = 37.6454, zoom = 10)
   })
   
-  #Choose just one city
+  # UI 상에서 보고자 하는 시를 클릭할 때마다 서버가 반응하여 해당하는 시의 데이터를 불러옵니다.
   drawvalue <- reactive({
-    if (input$city == 'All') {
+    if (input$도시 == 'All') {
       t <- Public_Assets
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
     }
-    else if (input$city == 'Gapyeong') {
-      t <- filter(Public_Assets, city == input$city)
+    else if (input$도시 == '가평') {
+      t <- filter(Public_Assets, 도시 == input$도시)
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
     }
-    else if (input$city == 'Gimpo') {
-      t <- filter(Public_Assets, city == input$city)
+    else if (input$도시 == '김포') {
+      t <- filter(Public_Assets, 도시 == input$도시)
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
-    else if (input$city == 'Goyang') {
-      t <- filter(Public_Assets, city == input$city)
+    else if (input$도시 == '고양') {
+      t <- filter(Public_Assets, 도시 == input$도시)
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
-    else if (input$city == 'Gwangju') {
-      t <- filter(Public_Assets, city == input$city)
+    else if (input$도시 == '광주') {
+      t <- filter(Public_Assets, 도시 == input$도시)
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
     else {
-      t <- filter(Public_Assets, city == input$city)
+      t <- filter(Public_Assets, 도시 == input$도시)
       if (input$type == ''){return(t)}else{
         t <- filter(t, 재산명칭 == input$type)
         return(t)}
       }
   })
   
-  # Choose just one type
-  
-  # This observer is responsible for maintaining the circles and legend,
-  # according to the variables the user has chosen to map to color and size.
+  # User가 선택한 데이터 정보를 지도에 원으로 표시합니다. 이 때, UI 상의 legend에서 
+  # 특정 재산 형태를 클릭하면 해당하는 공유 재산만을 지도에 뿌려줍니다.
+  # 또한 cluster를 클릭할 경우, 주변 공유 재산끼리 묶어 다각형 형태로 군집화하여 지도에 표시해 줍니다.
   observe({
     
-    sizeBy <- input$size
+    sizeBy <- input$크기
     draw <- drawvalue()
     colorBy <- "재산명칭"
     
@@ -85,9 +83,9 @@ shinyServer(function(input, output, session) {
       leafletProxy("map", data = draw) %>%
         clearShapes() %>%
         showGroup('Cluster') %>%
-        addCircles(~lon, ~lat, radius=draw[[sizeBy]], group = "Circle",
+        addCircles(~경도, ~위도, radius=draw[[sizeBy]], group = "Circle",
                     stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
-        addCircleMarkers(~lon, ~lat, radius = 0, group = "Cluster",
+        addCircleMarkers(~경도, ~위도, radius = 0, group = "Cluster",
                          clusterOptions = markerClusterOptions())%>%
         addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
                   layerId="colorLegend")
@@ -95,17 +93,18 @@ shinyServer(function(input, output, session) {
       leafletProxy("map", data = draw) %>%
         clearShapes() %>%
         hideGroup('Cluster') %>%
-        addCircles(~lon, ~lat, radius=draw[[sizeBy]], group = "Circle",
+        addCircles(~경도, ~위도, radius=draw[[sizeBy]], group = "Circle",
                    stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
         addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
                   layerId="colorLegend")
     }
   })
   
-  # Show a popup at the given location
+  # 지도 상에서 특정 공유 재산 원을 클릭했을 때, 해당 공유 재산의 위/경도 및 기본 정보가
+  # 팝업 형식으로 지도 위에 출력됩니다.
   showvcPopup <- function(eventid, latitude, longitude) {
     draw <- drawvalue()
-    selectedvc <- filter(draw, lat == latitude, lon == longitude)
+    selectedvc <- filter(draw, 위도 == latitude, 경도 == longitude)
     entry <- function(row){
       result <- as.character(tagList(
         tags$strong(sprintf("재산명칭: %s", row[4])), tags$br(),
@@ -130,6 +129,48 @@ shinyServer(function(input, output, session) {
     isolate({
       showvcPopup(event$id, event$lat, event$lng)
     })
+  })
+
+  ## See Your Neighbourhood ###########################################
+
+  observe({
+    assets <- if (is.null(input$cities)) character(0) else {
+      filter(Public_Assets, 도시 %in% input$cities) %>%
+        `$`('재산명칭') %>%
+        unique() %>%
+        sort()
+    }
+    stillSelected <- isolate(input$assets[input$assets %in% assets])
+    updateSelectInput(session, "assets", choices = assets,
+                      selected = stillSelected)
+  })
+
+  # When actions is clicked, call popup function for the corresponding latitude and longitude
+  observe({
+    if (is.null(input$goto))
+      return()
+    isolate({
+      map <- leafletProxy("map")
+      map %>% clearPopups()
+      dist <- 0.02
+      event <- input$map_shape_click
+      lat <- input$goto$lat
+      lng <- input$goto$lng
+      showvcPopup(event$id, lat, lng)
+      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+    })
+  })
+
+  output$P.A.table <- DT::renderDataTable({
+    df <- Public_Assets[, !names(Public_Assets) %in% c("radius")] %>%
+      filter(
+        is.null(input$cities) | 도시 %in% input$cities,
+        is.null(input$assets) | 재산명칭 %in% input$assets
+      ) %>%
+      mutate(Action = paste('<a class="go-map" href="" data-lat="', 위도, '" data-long="', 경도, '" data-city="', 도시, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+    action <- DT::dataTableAjax(session, df)
+  
+    DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
 })
 

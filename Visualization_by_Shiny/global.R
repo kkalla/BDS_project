@@ -54,22 +54,32 @@ for(i in 1:length(files)){
   data_list[[i]] = read.csv(paste0('data/',files[i]))
   tmp = data_list[[i]]
   tmp = data.frame(tmp$city, tmp$latitude, tmp$longitude, tmp$공부지목명, tmp$재산면적, tmp$대장가액.원., tmp$avg_price)
-  colnames(tmp) <- c('city','lat', 'lon', '재산명칭', 'size', 'tot_price', 'avg_price')
-  tmp = tmp[!duplicated(tmp[,c('lat','lon')]),]
-  tmp$avg_price = round(tmp$avg_price)
+  colnames(tmp) <- c('도시','위도', '경도', '재산명칭', '크기', '대장가액', '평균가격')
+  tmp = tmp[!duplicated(tmp[,c('위도','경도')]),]
+  tmp$평균가격 = round(tmp$평균가격)
   tmp$재산명칭 <- as.character(tmp$재산명칭)
-  tmp$city <- as.character(tmp$city)
-  tmp$radius = getRad(tmp$size)
-  tmp$avg_price_size = get_avg_price(tmp$tot_price,tmp$size)
+  tmp$도시 <- as.character(tmp$도시)
+  tmp$radius = getRad(tmp$크기)
+  tmp$면적당평균가 = get_avg_price(tmp$대장가액,tmp$크기)
   Public_Assets = rbind(Public_Assets,tmp)
 }
- vector <- c("cemetery","dae", "dap", "factory", "fishery", "forest", "googeo","jeon","levee", "mixed", "oil","orchard", "park","parking","pasture","rail", "religion","river","road", "school", "sports","unknown", "water","garage")
- vector0 <-c('묘지','대','답','공장용지','양식장','임야','구거','전','제방','잡종지','유지','과수원','공원용지','주차장','목장용지','철도용지','종교용지','하천','도로','학교용지','체육용지','미등록','수도용지','창고용지')
+ vector <- c("park","factory", "orchard", "googeo", "dap", "dae", "road","pasture","cemetery", "unknown", "water","fishery", "oil","forest","mixed","jeon", "levee","religion","parking", "garage", "rail","sports", "river","school")
+ vector0 <-c('공원용지','공장용지','과수원','구거','답','대','도로','목장용지','묘지','미등록','수도용지','양식장','유지','임야','잡종지','전','제방','종교용지','주차장','창고용지','철도용지','체육용지','하천','학교용지')
 
 a <- Public_Assets$재산명칭
-
 for(i in 1:length(a)){
-  if(a[i]=='schoo') a[i]<-'school'
   a[i]<- vector0[vector==a[i]] 
 }
 Public_Assets$재산명칭 <- a
+ 
+ vector1 <- c("Gapyeong","Gimpo","Goyang","Gwangju","Namyangju")
+ vecotr2 <- c("가평","김포","고양","광주","남양주")
+b <- Public_Assets$도시
+for(i in 1:length(b)){
+  b[i]<- vecotr2[vector1==b[i]]
+}
+Public_Assets$도시 <- b
+
+
+
+
